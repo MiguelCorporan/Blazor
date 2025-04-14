@@ -1,3 +1,4 @@
+using Blazored.SessionStorage;
 using Microsoft.EntityFrameworkCore;
 using taskUser.Components;
 using taskUser.DBModels;
@@ -13,6 +14,8 @@ builder.Services.AddDbContext<TareasAppContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<AdminPanelServices>();
+
+builder.Services.AddBlazoredSessionStorage();
 
 var app = builder.Build();
 

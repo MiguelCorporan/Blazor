@@ -12,6 +12,8 @@ namespace taskUser.PanelServices
 
         public async Task<ResponseModel> Register(RegistrationModel registrationModel)
         {
+
+
             Console.WriteLine($"Email recibido: {registrationModel.Email}");
             var existingAdmin = await _context.AdminInfos.FirstOrDefaultAsync(x => x.Email == registrationModel.Email);
 
@@ -36,6 +38,35 @@ namespace taskUser.PanelServices
             await _context.SaveChangesAsync();
 
             return new ResponseModel { Success = true, Message = "Resgistration succesful." };
+        }
+
+
+        public async Task<ResponseModel> Login(LoginModel loginModel)
+        {
+            var user = await _context.AdminInfos.FirstOrDefaultAsync(x => x.Email == loginModel.EmailId);
+            if (user == null)
+            {
+                return new ResponseModel
+                {
+                    Success = false,
+                    Message = "Email not found"
+                };
+            }
+
+            if (user.Password != loginModel.Password)
+            {
+                return new ResponseModel
+                {
+                    Success = false,
+                    Message = "Password is incorrect"
+                };
+            }
+
+            return new ResponseModel
+            {
+                Success = true,
+                Message = Convert.ToString(user.Id) + "|" + user.Name + "|" + user.Email
+            };
         }
 
 
