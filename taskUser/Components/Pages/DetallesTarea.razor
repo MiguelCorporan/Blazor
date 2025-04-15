@@ -1,0 +1,90 @@
+﻿@page "/detalles-tarea/{id:int}"
+@using Microsoft.EntityFrameworkCore
+@using taskUser.Models
+@using taskUser.Data
+@inject TareasAppContext db
+@inject NavigationManager nav
+
+@rendermode InteractiveServer
+
+<h3>Detalles de la Tarea</h3>
+
+@if (tarea == null)
+{
+    <p class="text-danger">Tarea no encontrada.</p>
+}
+else
+{
+    <div class="mb-3">
+        <label class="form-label"><strong>Título:</strong></label>
+        <p>@tarea.Titulo</p>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label"><strong>Descripción:</strong></label>
+        @if (!editandoDescripcion)
+        {
+            <p>@tarea.Descripcion</p>
+            <button class="btn btn-secondary" @onclick="() => editandoDescripcion = true">Editar Descripción</button>
+        }
+        else
+        {
+            <textarea class="form-control mb-2" @bind="@nuevaDescripcion"></textarea>
+            <button class="btn btn-success me-2" @onclick="GuardarDescripcion">Guardar</button>
+            <button class="btn btn-outline-secondary" @onclick="() => editandoDescripcion = false">Cancelar</button>
+        }
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label"><strong>Completada:</strong></label>
+        <p>@(tarea.Completada ? "Sí" : "No")</p>
+        @if (!tarea.Completada)
+        {
+            <button class="btn btn-success" @onclick="CompletarTarea">Marcar como completada</button>
+        }
+    </div>
+
+    <button class="btn btn-primary mt-3" @onclick="Volver">Volver a mis tareas</button>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    private Tarea? tarea;
+    private bool editandoDescripcion = false;
+    private string? nuevaDescripcion;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tarea = await db.Tareas.FindAsync(id);
+
+        if (tarea != null)
+        {
+            nuevaDescripcion = tarea.Descripcion;
+        }
+    }
+
+    private async Task GuardarDescripcion()
+    {
+        if (tarea != null)
+        {
+            tarea.Descripcion = nuevaDescripcion;
+            await db.SaveChangesAsync();
+            editandoDescripcion = false;
+        }
+    }
+
+    private async Task CompletarTarea()
+    {
+        if (tarea != null && !tarea.Completada)
+        {
+            tarea.Completada = true;
+            await db.SaveChangesAsync();
+        }
+    }
+
+    private void Volver()
+    {
+        nav.NavigateTo("/crear-tarea");
+    }
+}

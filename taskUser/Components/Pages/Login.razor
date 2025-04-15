@@ -74,6 +74,9 @@
             await sessionStorage.SetItemAsync("AdminName", userResponse[1]);
             await sessionStorage.SetItemAsync("adminEmail", userResponse[2]);
             await JS.InvokeVoidAsync("sessionStorage.setItem", "isLoggedIn", "true");
+			Console.WriteLine($"User ID: {userResponse[0]}");
+			
+            
             navigation.NavigateTo("/");
             navigation.Refresh(forceReload:true);
         }

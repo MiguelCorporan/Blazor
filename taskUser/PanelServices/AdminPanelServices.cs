@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using taskUser.DBModels;
+using taskUser.Data;
 using taskUser.Models;
+
 
 namespace taskUser.PanelServices
 {

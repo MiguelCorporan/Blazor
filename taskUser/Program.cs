@@ -1,8 +1,16 @@
-using Blazored.SessionStorage;
+/*using Blazored.SessionStorage;
 using Microsoft.EntityFrameworkCore;
 using taskUser.Components;
 using taskUser.DBModels;
+using taskUser.PanelServices;*/
+
+using Blazored.SessionStorage;
+using Microsoft.EntityFrameworkCore;
+using taskUser.Data;        // NUEVO: Aquí está tu DbContext
+
+using taskUser.Components;
 using taskUser.PanelServices;
+using taskUser.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +22,7 @@ builder.Services.AddDbContext<TareasAppContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<AdminPanelServices>();
+builder.Services.AddScoped<TaskService>();
 
 builder.Services.AddBlazoredSessionStorage();
 
