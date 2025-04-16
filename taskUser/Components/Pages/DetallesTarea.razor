@@ -1,4 +1,5 @@
-﻿@page "/detalles-tarea/{id:int}"
+﻿
+@page "/detalles-tarea/{id:int}"
 @using Microsoft.EntityFrameworkCore
 @using taskUser.Models
 @using taskUser.Data
@@ -7,45 +8,102 @@
 
 @rendermode InteractiveServer
 
-<h3>Detalles de la Tarea</h3>
+<div class="container-xl d-flex justify-content-center mt-5 mb-5">
+    <div class="card neon-card p-4">
+        <h3 class="text-neon mb-4">
+            <i class="fas fa-info-circle me-2"></i>Detalles de la Tarea
+        </h3>
 
-@if (tarea == null)
-{
-    <p class="text-danger">Tarea no encontrada.</p>
-}
-else
-{
-    <div class="mb-3">
-        <label class="form-label"><strong>Título:</strong></label>
-        <p>@tarea.Titulo</p>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label"><strong>Descripción:</strong></label>
-        @if (!editandoDescripcion)
+        @if (tarea == null)
         {
-            <p>@tarea.Descripcion</p>
-            <button class="btn btn-secondary" @onclick="() => editandoDescripcion = true">Editar Descripción</button>
+            <div class="alert alert-danger">Tarea no encontrada.</div>
         }
         else
         {
-            <textarea class="form-control mb-2" @bind="@nuevaDescripcion"></textarea>
-            <button class="btn btn-success me-2" @onclick="GuardarDescripcion">Guardar</button>
-            <button class="btn btn-outline-secondary" @onclick="() => editandoDescripcion = false">Cancelar</button>
+            <div class="mb-3">
+                <label class="form-label text-light"><strong>Título:</strong></label>
+                <p class="text-light">@tarea.Titulo</p>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-light"><strong>Descripción:</strong></label>
+                @if (!editandoDescripcion)
+                {
+                    <p class="text-light">@tarea.Descripcion</p>
+                    <button class="btn btn-outline-neon text-neon mt-2" @onclick="() => editandoDescripcion = true">
+                        <i class="fas fa-edit me-1"></i>Editar Descripción
+                    </button>
+                }
+                else
+                {
+                    <textarea class="form-control mb-2 bg-dark text-light border-neon" @bind="@nuevaDescripcion"></textarea>
+                    <button class="btn btn-success me-2" @onclick="GuardarDescripcion">
+                        <i class="fas fa-save me-1"></i>Guardar
+                    </button>
+                    <button class="btn btn-outline-light" @onclick="() => editandoDescripcion = false">
+                        Cancelar
+                    </button>
+                }
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-light"><strong>Completada:</strong></label>
+                <p class="text-light">@(tarea.Completada ? "Sí" : "No")</p>
+                @if (!tarea.Completada)
+                {
+                    <button class="btn btn-success" @onclick="CompletarTarea">
+                        <i class="fas fa-check me-1"></i>Marcar como completada
+                    </button>
+                }
+            </div>
+
+            <button class="btn btn-outline-neon text-neon mt-4" @onclick="Volver">
+                <i class="fas fa-arrow-left me-1"></i>Volver a mis tareas
+            </button>
         }
     </div>
+</div>
 
-    <div class="mb-3">
-        <label class="form-label"><strong>Completada:</strong></label>
-        <p>@(tarea.Completada ? "Sí" : "No")</p>
-        @if (!tarea.Completada)
-        {
-            <button class="btn btn-success" @onclick="CompletarTarea">Marcar como completada</button>
+<style>
+   
+
+    .neon-card {
+        background-color: #2a2a2a!important;
+        border: 1px solid #20c997;
+        border-radius: 1rem;
+        box-shadow: 0 0 10px #20c99788;
+        max-width: 580px;
+        width: 100%;
+    }
+
+    .text-neon {
+        color: #20c997 !important;
+        text-shadow: 0 0 4px rgba(32, 201, 151, 0.5);
+    }
+
+    .btn-outline-neon {
+        border: 2px solid #20c997;
+        color: #20c997;
+        background-color: transparent;
+        box-shadow: 0 0 6px rgba(32, 201, 151, 0.3);
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-neon:hover {
+            background-color: #20c997;
+            color: white;
+            box-shadow: 0 0 12px rgba(32, 201, 151, 0.8);
         }
-    </div>
 
-    <button class="btn btn-primary mt-3" @onclick="Volver">Volver a mis tareas</button>
-}
+    .border-neon {
+        border: 1px solid #20c997;
+        border-radius: 8px;
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+    }
+</style>
 
 @code {
     [Parameter] public int id { get; set; }
@@ -57,7 +115,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         tarea = await db.Tareas.FindAsync(id);
-
         if (tarea != null)
         {
             nuevaDescripcion = tarea.Descripcion;
@@ -85,6 +142,6 @@ else
 
     private void Volver()
     {
-        nav.NavigateTo("/crear-tarea");
+        nav.NavigateTo("/mis-tareas");
     }
 }

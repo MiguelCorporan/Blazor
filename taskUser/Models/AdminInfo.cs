@@ -1,10 +1,4 @@
-﻿/*namespace taskUser.Models
-{
-    public class AdminInfo
-    {
-    }
-}
-*/
+﻿
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using taskUser.Models;

@@ -1,16 +1,4 @@
-﻿/*using Microsoft.EntityFrameworkCore;
-using taskUser.Models;
-
-namespace taskUser.Data
-{
-    public class TareasAppContext
-    {
-    }
-}*/
-
-
-
-// Data/TareasAppContext.cs
+﻿
 using Microsoft.EntityFrameworkCore;
 using taskUser.Models;
 

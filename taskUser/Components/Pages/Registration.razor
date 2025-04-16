@@ -1,226 +1,9 @@
-﻿@* 
-@page "/register"
+﻿@page "/register"
 @using taskUser.Models;
 @using taskUser.PanelServices;
 @using Microsoft.AspNetCore.Components.Forms
 @using Blazored.SessionStorage
-@inject AdminPanelServices adminPanelServices;
-@inject NavigationManager navigation
-@inject IJSRuntime JS
-
-<style>
-    .register-page {
-        background-image: url('Image/taskApp1.jpg');
-        background-size: cover;
-        background-position: center;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        padding-left: 24px;
-    }
-
-    .register-form-container {
-        background-color: rgba(255, 255, 255, 0.95);
-        padding: 2rem;
-        border-radius: 12px;
-        max-width: 400px;
-        width: 100%;
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-    }
-
-    @@media (max-width: 768px) {
-        .register-page {
-            justify-content: center;
-            padding-left: 0;
-        }
-
-        .register-form-container {
-            margin: 2rem;
-        }
-    }
-</style>
-
-<div class="register-page">
-    <div class="register-form-container">
-        <h3 class="text-primary text-center mb-4">Registro</h3>
-
-        <EditForm Model="registrationModel" OnValidSubmit="HandleRegistration" FormName="registerForm">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-
-            <div class="mb-3">
-                <label for="name" class="form-label">Nombre:</label>
-                <InputText id="name" class="form-control" @bind-Value="registrationModel.Name" />
-            </div>
-
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <InputText id="email" class="form-control" type="email" @bind-Value="registrationModel.Email" />
-            </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">Contraseña:</label>
-                <InputText id="password" class="form-control" type="password" @bind-Value="registrationModel.Password" />
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">Registrar</button>
-
-            @if (!string.IsNullOrEmpty(alertMessage))
-            {
-                <div class="alert alert-info mt-3">@alertMessage</div>
-            }
-
-            <p class="text-center mt-3">
-                ¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a>
-            </p>
-        </EditForm>
-    </div>
-</div>
-
-@code {
-    [SupplyParameterFromForm]
-    public RegistrationModel registrationModel { get; set; } = new();
-    private string alertMessage;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        var isLoggedIn = await JS.InvokeAsync<string>("sessionStorage.getItem", "isLoggedIn");
-
-        if (!string.IsNullOrEmpty(isLoggedIn) && isLoggedIn.ToLower() == "true")
-        {
-            // Redirige al inicio si ya está logueado
-            navigation.NavigateTo("/");
-        }
-    }
-
-    private async Task HandleRegistration()
-    {
-        Console.WriteLine($"HandleRegistration() llamado");
-        Console.WriteLine($"Name: {registrationModel.Name}");
-        Console.WriteLine($"Email: {registrationModel.Email}");
-        Console.WriteLine($"Password: {registrationModel.Password}");
-
-        var registrationResponse = await adminPanelServices.Register(registrationModel);
-        alertMessage = registrationResponse.Message;
-    }
-}
- *@
-
-@* 
-@page "/register"
-@using taskUser.Models;
-@using taskUser.PanelServices;
-@using Microsoft.AspNetCore.Components.Forms
-@using Blazored.SessionStorage
-@inject AdminPanelServices adminPanelServices;
-@inject NavigationManager navigation
-@inject IJSRuntime JS
-
-<style>
-    .register-page {
-        background-image: url('Image/taskApp1.jpg');
-        background-size: cover;
-        background-position: center;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        padding-left: 24px;
-    }
-
-    .register-form-container {
-        background-color: rgba(255, 255, 255, 0.95);
-        padding: 2rem;
-        border-radius: 12px;
-        max-width: 400px;
-        width: 100%;
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-    }
-
-    @@media (max-width: 768px) {
-        .register-page {
-            justify-content: center;
-            padding-left: 0;
-        }
-
-        .register-form-container {
-            margin: 2rem;
-        }
-    }
-</style>
-
-<div class="register-page">
-    <div class="register-form-container">
-        <h3 class="text-primary text-center mb-4">Registro</h3>
-
-        <EditForm Model="registrationModel" OnValidSubmit="HandleRegistration" FormName="registerForm">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-
-            <div class="mb-3">
-                <label for="name" class="form-label">Nombre:</label>
-                <InputText id="name" class="form-control" @bind-Value="registrationModel.Name" />
-            </div>
-
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <InputText id="email" class="form-control" type="email" @bind-Value="registrationModel.Email" />
-            </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">Contraseña:</label>
-                <InputText id="password" class="form-control" type="password" @bind-Value="registrationModel.Password" />
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">Registrar</button>
-
-            @if (!string.IsNullOrEmpty(alertMessage))
-            {
-                <div class="alert alert-info mt-3">@alertMessage</div>
-            }
-
-            <p class="text-center mt-3">
-                ¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a>
-            </p>
-        </EditForm>
-    </div>
-</div>
-
-@code {
-    [SupplyParameterFromForm]
-    public RegistrationModel registrationModel { get; set; } = new();
-    private string alertMessage;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            var isLoggedIn = await JS.InvokeAsync<string>("sessionStorage.getItem", "isLoggedIn");
-
-            if (!string.IsNullOrEmpty(isLoggedIn) && isLoggedIn.ToLower() == "true")
-            {
-                navigation.NavigateTo("/");
-            }
-        }
-    }
-
-    private async Task HandleRegistration()
-    {
-        Console.WriteLine($"HandleRegistration() llamado");
-        Console.WriteLine($"Name: {registrationModel.Name}");
-        Console.WriteLine($"Email: {registrationModel.Email}");
-        Console.WriteLine($"Password: {registrationModel.Password}");
-
-        var registrationResponse = await adminPanelServices.Register(registrationModel);
-        alertMessage = registrationResponse.Message;
-    }
-} *@
-@page "/register"
-@using taskUser.Models;
-@using taskUser.PanelServices;
-@using Microsoft.AspNetCore.Components.Forms
-@using Blazored.SessionStorage
+@inject ISessionStorageService sessionStorage
 @inject AdminPanelServices adminPanelServices;
 @inject NavigationManager navigation
 @inject IJSRuntime JS
@@ -229,23 +12,95 @@
 
 <style>
     .register-page {
-        background-image: url('Image/taskApp1.jpg');
+        background-image: url('Image/taskApp2.jpg');
         background-size: cover;
         background-position: center;
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        padding-left: 24px;
+        padding-left: 8rem;
     }
 
     .register-form-container {
-        background-color: rgba(255, 255, 255, 0.95);
-        padding: 2rem;
-        border-radius: 12px;
-        max-width: 400px;
+        /* background-color: #0f172a; */
+        background-color: #fff;
+        padding: 3rem;
+        border-radius: 16px;
+        max-width: 380px;
         width: 100%;
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        color: white;
+    }
+
+    .form-control-dark {
+        background-color: #1e293b;
+        border: none;
+        padding-left: 2.8rem!important;
+        color: white;
+        height: 2.6rem;
+        font-size: 0.95rem;
+        border-radius: 8px;
+    }
+
+        .form-control-dark::placeholder {
+            color: #cbd5e1;
+        }
+
+    .input-icon {
+        position: relative;
+    }
+
+        .input-icon i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.2rem;
+        }
+
+    .btn-purple {
+        background: linear-gradient(to right, #a4cfff, #20c997);
+        border: none;
+        color: white;
+    }
+
+        .btn-purple:hover {
+            background: linear-gradient(to right, #20c997, #a4cfff );
+        }
+
+    .social-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+        .social-buttons button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+            border-radius: 6px;
+            padding: 0.5rem;
+        }
+
+     .muted{
+            color: #111!important;
+        }
+
+    .muted a {
+            color: #3470b4;
+        text-decoration: none;
+    }
+
+    .colorB{
+        color: #20c997;
     }
 
     @@media (max-width: 768px) {
@@ -262,37 +117,39 @@
 
 <div class="register-page">
     <div class="register-form-container">
-        <h3 class="text-primary text-center mb-4">Registro</h3>
+        <h4 class="text-center fw-bold mb-2 colorB">Create Account</h4>
+        <p class="text-center text-muted mb-4" style="font-size: 0.9rem;">Create your account now!</p>
 
         <EditForm Model="registrationModel" OnValidSubmit="HandleRegistration" FormName="registerForm">
             <DataAnnotationsValidator />
             <ValidationSummary />
 
-            <div class="mb-3">
-                <label for="name" class="form-label">Nombre:</label>
-                <InputText id="name" class="form-control" @bind-Value="registrationModel.Name" />
+            <div class="mb-3 input-icon">
+                <i class="bi bi-person-fill"></i>
+                <InputText class="form-control form-control-dark" placeholder="Full name" @bind-Value="registrationModel.Name" />
             </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <InputText id="email" class="form-control" type="email" @bind-Value="registrationModel.Email" />
+            <div class="mb-3 input-icon">
+                <i class="bi bi-envelope-fill"></i>
+                <InputText class="form-control form-control-dark" type="email" placeholder="Email" @bind-Value="registrationModel.Email" />
             </div>
 
-            <div class="mb-3">
-                <label for="password" class="form-label">Contraseña:</label>
-                <InputText id="password" class="form-control" type="password" @bind-Value="registrationModel.Password" />
+            <div class="mb-3 input-icon">
+                <i class="bi bi-lock-fill"></i>
+                <InputText class="form-control form-control-dark" type="password" placeholder="Password" @bind-Value="registrationModel.Password" />
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Registrar</button>
+            <button type="submit" class="btn btn-purple w-100">Sign Up</button>
 
             @if (!string.IsNullOrEmpty(alertMessage))
             {
                 <div class="alert alert-info mt-3">@alertMessage</div>
             }
 
-            <p class="text-center mt-3">
-                ¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a>
+            <p class="text-center muted mt-3" style="font-size: 0.85rem;">
+                Already have an account? <a href="/login">Login</a>
             </p>
+
         </EditForm>
     </div>
 </div>
@@ -312,20 +169,32 @@
 
             if (!string.IsNullOrEmpty(isLoggedIn) && isLoggedIn.ToLower() == "true")
             {
-                navigation.NavigateTo("/", true); // Redirige si ya está logueado
+                navigation.NavigateTo("/", true);
             }
         }
     }
 
+    // private async Task HandleRegistration()
+    // {
+    //     var registrationResponse = await adminPanelServices.Register(registrationModel);
+    //     alertMessage = registrationResponse.Message;
+    // }
+
     private async Task HandleRegistration()
     {
-        Console.WriteLine($"HandleRegistration() llamado");
-        Console.WriteLine($"Name: {registrationModel.Name}");
-        Console.WriteLine($"Email: {registrationModel.Email}");
-        Console.WriteLine($"Password: {registrationModel.Password}");
-
         var registrationResponse = await adminPanelServices.Register(registrationModel);
-        alertMessage = registrationResponse.Message;
+        alertMessage = "Registration successful! Redirecting...";
+
+        if (registrationResponse.Success)
+        {
+            var userInfo = registrationResponse.Message.Split('|');
+            await sessionStorage.SetItemAsync("adminKey", userInfo[0]);
+            await sessionStorage.SetItemAsync("AdminName", userInfo[1]);
+            await sessionStorage.SetItemAsync("adminEmail", userInfo[2]);
+            await JS.InvokeVoidAsync("sessionStorage.setItem", "isLoggedIn", "true");
+
+            await Task.Delay(2000);
+            navigation.NavigateTo("/", true);
+        }
     }
 }
-

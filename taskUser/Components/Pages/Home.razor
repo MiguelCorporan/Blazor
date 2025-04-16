@@ -1,8 +1,57 @@
-﻿@page "/"
+﻿
+@page "/"
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="home-container">
+    <div class="home-text">
+        <h1>
+            Para poderlo<br />
+            lograr<br />
+            te debes organizar<br />
+            Task - App
+        </h1>
+        <a href="/crear-tarea" class="crear-tarea-btn">Crear Tarea</a>
+    </div>
+</div>
 
-<a href="/crear-tarea">+</a>
-Welcome to your new app.
+<style>
+    .home-container {
+        position: relative;
+        height: 100vh;
+        background-image: url('Image/TaskApp3.jpg'); /* Asegúrate de tener esta imagen en wwwroot/images */
+        background-size: cover;
+        background-position: center;
+    }
+
+    .home-text {
+        position: absolute;
+        top: 20%;
+        left: 10%;
+        color: black;
+        max-width: 500px;
+    }
+
+        .home-text h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+    .crear-tarea-btn {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.6rem 1.2rem;
+        background-color: #20c997; /* Color tipo Bootstrap success */
+        color: white;
+        border: none;
+        border-radius: 0.3rem;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .crear-tarea-btn:hover {
+            background-color: #198754;
+        }
+</style>

@@ -1,11 +1,4 @@
-﻿/*namespace taskUser.PanelServices
-{
-    public class TaskServices
-    {
-    }
-}
-*/
-
+﻿
 using Microsoft.EntityFrameworkCore;
 using taskUser.Data;
 using taskUser.Models;
@@ -20,8 +13,6 @@ namespace taskUser.PanelServices
         {
             _context = context;
         }
-
-        // Método para crear una nueva tarea
         public async Task<ResponseModel> CrearTarea(Tarea tarea)
         {
             try

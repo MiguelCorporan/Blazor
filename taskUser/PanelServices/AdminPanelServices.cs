@@ -38,7 +38,8 @@ namespace taskUser.PanelServices
 
             await _context.SaveChangesAsync();
 
-            return new ResponseModel { Success = true, Message = "Resgistration succesful." };
+            /*return new ResponseModel { Success = true, Message = "Resgistration succesful." };*/
+            return new ResponseModel { Success = true, Message = $"{dbAdminInfo.Id}|{dbAdminInfo.Name}|{dbAdminInfo.Email}" };
         }
 
 
